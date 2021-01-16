@@ -55,7 +55,7 @@ class Board {
 	clear() {
 		//TODO: implement exclusion of matching gems.
 
-		return false;
+		return true;
 	}
 
 	// Updates visible board.
