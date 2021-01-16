@@ -6,23 +6,24 @@
 
 	<link rel="stylesheet" href="main.css">
 
+	<script type="text/javascript" src="board.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+
 	<title>Bejeweled</title>
 </head>
 
-<body>
+<body onload="main()">
 	<h1>Bejeweled</h1>
 
 	<p id="game"></p>
 
-	<p id="score"></p>
+	<p>Score: <span id="score"></span></p>
 
 	<p id="instructions"></p>
 
 	<input type="text" id="input">
 
 	<button id="send">Send</button>
-
-	<script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>
