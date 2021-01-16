@@ -1,6 +1,7 @@
 "use strict";
 
 class Board {
+	// Creates the board and makes sure it is valid.
 	constructor(size, display) {
 		this.size = size;
 		this.board = new Array(size);
@@ -20,6 +21,7 @@ class Board {
 		this.update();
 	}
 
+	// Moves the selected piece, clear necessary pieces, and undoes the move if it's invalid.
 	move(row, column, direction) {
 		const selected = this.board[row][column];
 		var nextRow = row;
@@ -49,12 +51,14 @@ class Board {
 		this.update();
 	}
 
+	// Clear pieces until there are no  matching pieces. Returns whether or not any piece was actually cleared.
 	clear() {
 		//TODO: implement exclusion of matching gems.
 
 		return false;
 	}
 
+	// Updates visible board.
 	update() {
 		var boardString = "";
 

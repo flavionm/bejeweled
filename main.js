@@ -4,6 +4,7 @@ const size = 8;
 
 var board;
 
+// Initialize game elements.
 function start() {
 	board = new Board(size, document.getElementById("game"));
 	board.update();
@@ -13,6 +14,7 @@ function start() {
 	document.getElementById("column").setAttribute("max", size - 1);
 }
 
+// Reads and validate user input.
 function move() {
 	var error = document.getElementById("error");
 	error.innerHTML = "";
