@@ -3,3 +3,7 @@
 	font-size: x-large;
 	white-space: pre
 }
+
+#error {
+	color: red;
+}

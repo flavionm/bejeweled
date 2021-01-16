@@ -2,10 +2,11 @@
 
 const size = 8;
 
-const board = new Board(size);
+var board;
 
 function start() {
-	document.getElementById("game").innerHTML = board.toString();
+	board = new Board(size, document.getElementById("game"));
+	board.update();
 	document.getElementById("score").innerHTML = board.score;
 
 	document.getElementById("row").setAttribute("max", size - 1);
@@ -13,9 +14,19 @@ function start() {
 }
 
 function move() {
+	var error = document.getElementById("error");
+	error.innerHTML = "";
+
 	var row = document.getElementById("row").value;
 	var column = document.getElementById("column").value;
 	var direction = document.getElementById("direction").value;
 
-	board.move(row, column, direction);
+	if ((row == 0 && direction == "up")
+		|| (row == size - 1 && direction == "down")
+		|| (column == 0 && direction == "left")
+		|| (column == size - 1 && direction == "right")) {
+		error.innerHTML = "Invalid movement!";
+	} else {
+		board.move(row, column, direction);
+	}
 }
