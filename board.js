@@ -1,8 +1,11 @@
+"use strict";
+
 class Board {
 	constructor(size) {
 		this.size = size;
 		this.board = new Array(size);
 		this.jewels = ["r", "g", "b", "y", "p"];
+		this.score = 0;
 
 		for (var i = 0; i < size; i++) {
 			this.board[i] = Array(size);
@@ -10,6 +13,10 @@ class Board {
 				this.board[i][j] = this.jewels[Math.floor(Math.random() * 5)];
 			}
 		}
+	}
+
+	move(row, column, direction) {
+		console.log(row + " " + column + " " + direction);
 	}
 
 	toString() {

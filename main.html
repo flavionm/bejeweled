@@ -12,18 +12,36 @@
 	<title>Bejeweled</title>
 </head>
 
-<body onload="main()">
+<body onload="start()">
 	<h1>Bejeweled</h1>
 
 	<p id="game"></p>
 
 	<p>Score: <span id="score"></span></p>
 
-	<p id="instructions"></p>
+	<form>
+		<legend>Enter your move:</legend>
+		<p>
+			<label for="row">Row:</label>
+			<input type="number" min="0" id="row">
+		</p>
+		<p>
+			<label for="column">Column:</label>
+			<input type="number" min="0" id="column">
+		</p>
+		<p>
+			<label for="direction">Direction:</label>
+			<select id="direction">
+				<option value="up">Up</option>
+				<option value="down">Down</option>
+				<option value="left">Left</option>
+				<option value="right">Right</option>
+			</select>
+		</p>
+		<button type='button' onclick="move()">Move</button>
+	</form>
 
-	<input type="text" id="input">
-
-	<button id="send">Send</button>
+	<p id="error"></p>
 </body>
 
 </html>
