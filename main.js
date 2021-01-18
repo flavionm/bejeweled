@@ -30,5 +30,6 @@ function move() {
 		error.innerHTML = "Invalid movement!";
 	} else {
 		board.move(row, column, direction);
+		document.getElementById("score").innerHTML =board.score;
 	}
 }
