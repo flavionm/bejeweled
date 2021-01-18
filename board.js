@@ -16,12 +16,13 @@ class Board {
 				this.board[i][j] = this.jewels[Math.floor(Math.random() * 5)];
 			}
 		}
-		
+
 		while(this.clear()>0){
 			this.create();
 		}
-		
+
 		this.update();
+		this.score = 0;
 	}
 
 	// Moves the selected piece, clear necessary pieces, and undoes the move if it's invalid.
@@ -29,7 +30,7 @@ class Board {
 		const selected = this.board[row][column];
 		var nextRow = row;
 		var nextColumn = column;
-		
+
 		if (direction == "up") {
 			nextRow--;
 		} else if (direction == "down") {
@@ -64,19 +65,19 @@ class Board {
 	clear() {
 		var num_jewels_destroyed=0;
 		var jewel_selected;
-		
+
 		for(var i=0;i<this.size;i++){
 			for(var j=0;j<this.size;j++){
-				
+
 
 				jewel_selected=this.board[i][j];
 				//condition to check if it is the right or left end of the board
 				if(j > 1 && j < 6 && jewel_selected != "-1"){
-					
+
 					// the 5 jewels are equal(horizontally)
-					if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected 
+					if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
 						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
-						num_jewels_destroyed+=5;	
+						num_jewels_destroyed+=5;
 						this.board[i][j-2]="-1";
 						this.board[i][j-1]="-1";
 						this.board[i][j]="-1";
@@ -85,7 +86,7 @@ class Board {
 					}
 
 					// the first 4 jewels are equal(horizontally)
-					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected 
+					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
 						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
 						num_jewels_destroyed+=4;
 						this.board[i][j-2]="-1";
@@ -95,7 +96,7 @@ class Board {
 					}
 
 					// the last 4 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected 
+					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected
 						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
 						num_jewels_destroyed+=4;
 						this.board[i][j-1]="-1";
@@ -105,7 +106,7 @@ class Board {
 					}
 
 					// the first 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected 
+					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
 						&& jewel_selected!=this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
 						num_jewels_destroyed+=3;
 						this.board[i][j-2]="-1";
@@ -114,7 +115,7 @@ class Board {
 					}
 
 					// the middle 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected 
+					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected
 						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
 						num_jewels_destroyed+=3;
 						this.board[i][j-1]="-1";
@@ -123,20 +124,20 @@ class Board {
 					}
 
 					// the last 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]!=jewel_selected 
+					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]!=jewel_selected
 						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
 						num_jewels_destroyed+=3;
 						this.board[i][j]="-1";
 						this.board[i][j+1]="-1";
 						this.board[i][j+2]="-1";
-					}								
+					}
 				}
 
 				//condition to check if it is the top or bottom end of the board
 				if( i > 1 && i < 6 && jewel_selected != "-1"){
-					
+
 					// the 5 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected 
+					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
 						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
 						num_jewels_destroyed+=5;
 						this.board[i-2][j]="-1";
@@ -144,9 +145,9 @@ class Board {
 						this.board[i][j]="-1";
 						this.board[i+1][j]="-1";
 						this.board[i+2][j]="-1";
-					}	
+					}
 					// the first 4 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected 
+					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
 						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
 						num_jewels_destroyed+=4;
 						this.board[i-2][j]="-1";
@@ -155,7 +156,7 @@ class Board {
 						this.board[i+1][j]="-1";
 					}
 					// the last 4 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected 
+					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected
 						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
 						num_jewels_destroyed+=4;
 						this.board[i-1][j]="-1";
@@ -164,7 +165,7 @@ class Board {
 						this.board[i+2][j]="-1";
 					}
 					// the first 3 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected 
+					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
 						&& jewel_selected!=this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
 						num_jewels_destroyed+=3;
 						this.board[i-2][j]="-1";
@@ -172,7 +173,7 @@ class Board {
 						this.board[i][j]="-1";
 					}
 					// the middle 3 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected 
+					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected
 						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
 						num_jewels_destroyed+=3;
 						this.board[i-1][j]="-1";
@@ -180,20 +181,20 @@ class Board {
 						this.board[i+1][j]="-1";
 					}
 					// the last 3 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]!=jewel_selected 
+					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]!=jewel_selected
 						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
 						num_jewels_destroyed+=3;
 						this.board[i][j]="-1";
 						this.board[i+1][j]="-1";
 						this.board[i+2][j]="-1";
 					}
-				}		
+				}
 
 			}
 		}
 		//updating the score
 		this.score+=this.jewel_value*num_jewels_destroyed;
-		
+
 		return num_jewels_destroyed;
 	}
 
