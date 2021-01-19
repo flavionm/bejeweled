@@ -72,7 +72,7 @@ class Board {
 
 				jewel_selected=this.board[i][j];
 				//condition to check if it is the right or left end of the board
-				if(j > 1 && j < 6 && jewel_selected != "-1"){
+				if(j > 1 && j < (this.size-2) && jewel_selected != "-1"){
 
 					// the 5 jewels are equal(horizontally)
 					if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
@@ -134,7 +134,7 @@ class Board {
 				}
 
 				//condition to check if it is the top or bottom end of the board
-				if( i > 1 && i < 6 && jewel_selected != "-1"){
+				if( i > 1 && i < (this.size-2) && jewel_selected != "-1"){
 
 					// the 5 jewels are equal(vertically)
 					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
@@ -202,8 +202,24 @@ class Board {
 	create(){
 		for(var i=0; i < this.size;i++){
 			for(var j=0;j < this.size;j++){
+				
+				//for each piece on top of a cleared piece move it down one position 
+				//or create a new one if it is on the first row
 				if(this.board[i][j] == "-1"){
-					this.board[i][j]=this.jewels[Math.floor(Math.random() * 5)];
+					if(i > 0){
+						for(var k=i;k >= 0;k--){
+							if(k > 0){
+								this.board[k][j]=this.board[k-1][j];	
+							}
+							else{
+								this.board[k][j]=this.jewels[Math.floor(Math.random() * 5)];	
+							} 
+								
+						}						
+					}
+					else{
+						this.board[i][j]=this.jewels[Math.floor(Math.random() * 5)];
+					}
 				}
 			}
 		}
