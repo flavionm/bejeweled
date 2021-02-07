@@ -27,8 +27,12 @@ class Board {
 				this.display.appendChild(jewel);
 				this.board[i][j] = jewel;
 			}
-
 		}
+
+		while (this.checkMove() != 0) {
+			this.createPieces();
+		}
+		this.score = 0;
 	}
 
 	//Change the color of given jewel
