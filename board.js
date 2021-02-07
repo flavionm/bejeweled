@@ -5,244 +5,139 @@ class Board {
 	constructor(size, display) {
 		this.size = size;
 		this.board = new Array(size);
-		this.jewels = ["r", "g", "b", "y", "p"];
+		this.jewels = ["red", "green", "blue", "yellow", "purple"];
 		this.score = 0;
 		this.jewel_value=10;
 		this.display = display;
-
-		for (var i = 0; i < size; i++) {
-			this.board[i] = Array(size);
-			for (var j = 0; j < size; j++) {
-				this.board[i][j] = this.jewels[Math.floor(Math.random() * 5)];
+		var id = 0;
+		for (var i = 0; i < this.size; i++) {
+			this.board[i]=Array(size);
+			for(var j=0;j<this.size;j++){
+				const jewel = document.createElement('div');
+    			jewel.setAttribute('draggable', true);
+    			jewel.setAttribute('id', id);
+    			id++;
+    			jewel.style.backgroundColor = this.jewels[Math.floor(Math.random() * this.jewels.length)];
+    			jewel.addEventListener('dragstart', dragStart)
+    			jewel.addEventListener('dragend', dragEnd);
+				jewel.addEventListener('dragover', dragOver);
+				jewel.addEventListener('dragenter', dragEnter);
+				jewel.addEventListener('drageleave', dragLeave);
+				jewel.addEventListener('drop', dragDrop);
+    			this.display.appendChild(jewel);
+    			this.board[i][j]=jewel;
 			}
-		}
-
-		while(this.clear()>0){
-			this.create();
-		}
-
-		this.update();
-		this.score = 0;
+    		
+  		}  				
 	}
-
-	// Moves the selected piece, clear necessary pieces, and undoes the move if it's invalid.
-	move(row, column, direction) {
-		const selected = this.board[row][column];
-		var nextRow = row;
-		var nextColumn = column;
-
-		if (direction == "up") {
-			nextRow--;
-		} else if (direction == "down") {
-			nextRow++;
-		} else if (direction == "left") {
-			nextColumn--;
-		} else if (direction == "right") {
-			nextColumn++;
-		}
-
-		const nextSelected = this.board[nextRow][nextColumn];
-		this.board[row][column] = nextSelected;
-		this.board[nextRow][nextColumn] = selected;
-
-		this.update();
-
-		if (this.clear() == 0 ) {
-			this.board[row][column] = selected;
-			this.board[nextRow][nextColumn] = nextSelected;
-		}
-		else{
-			this.create();
-			while(this.clear() > 0){
-				this.create();
-			}
-		}
-
-		this.update();
+	
+	//Change the color of given jewel
+	changeBackColor(jewelId,colorBeingReplaced){
+		var row  = Math.floor(jewelId/this.size);
+		var column = jewelId%this.size;
+		this.board[row][column].style.backgroundColor=colorBeingReplaced;
 	}
-
-	// Clear equals pieces from the board. Returns how many pieces were cleared.
-	clear() {
+	
+	//Checks if the move made destroyed any pieces. Updates the score and returns the number of pieces destroyed;
+	checkMove(){
 		var num_jewels_destroyed=0;
 		var jewel_selected;
 
 		for(var i=0;i<this.size;i++){
 			for(var j=0;j<this.size;j++){
 
-
-				jewel_selected=this.board[i][j];
-				//condition to check if it is the right or left end of the board
-				if(j > 1 && j < (this.size-2) && jewel_selected != "-1"){
-
-					// the 5 jewels are equal(horizontally)
-					if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
-						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
+				jewel_selected=this.board[i][j].style.backgroundColor;
+				
+				//condition to check if the jewel is already destroyed
+				if(jewel_selected != ""){
+					
+					// check if 5 jewels are equal(horizontally)
+					if(j <= (this.size-5) && jewel_selected==this.board[i][j+1].style.backgroundColor && this.board[i][j+1].style.backgroundColor==this.board[i][j+2].style.backgroundColor
+						&& this.board[i][j+2].style.backgroundColor==this.board[i][j+3].style.backgroundColor && this.board[i][j+3].style.backgroundColor==this.board[i][j+4].style.backgroundColor){
 						num_jewels_destroyed+=5;
-						this.board[i][j-2]="-1";
-						this.board[i][j-1]="-1";
-						this.board[i][j]="-1";
-						this.board[i][j+1]="-1";
-						this.board[i][j+2]="-1";
+						this.board[i][j].style.backgroundColor="";
+						this.board[i][j+1].style.backgroundColor="";
+						this.board[i][j+2].style.backgroundColor="";
+						this.board[i][j+3].style.backgroundColor="";
+						this.board[i][j+4].style.backgroundColor="";
 					}
-
-					// the first 4 jewels are equal(horizontally)
-					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
-						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
+					// check if  4 jewels are equal(horizontally)
+					else if(j <= (this.size-4) && jewel_selected==this.board[i][j+1].style.backgroundColor && this.board[i][j+1].style.backgroundColor==this.board[i][j+2].style.backgroundColor
+						&& this.board[i][j+2].style.backgroundColor==this.board[i][j+3].style.backgroundColor){
 						num_jewels_destroyed+=4;
-						this.board[i][j-2]="-1";
-						this.board[i][j-1]="-1";
-						this.board[i][j]="-1";
-						this.board[i][j+1]="-1";
+						this.board[i][j].style.backgroundColor="";
+						this.board[i][j+1].style.backgroundColor="";
+						this.board[i][j+2].style.backgroundColor="";
+						this.board[i][j+3].style.backgroundColor="";
 					}
-
-					// the last 4 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected
-						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
-						num_jewels_destroyed+=4;
-						this.board[i][j-1]="-1";
-						this.board[i][j]="-1";
-						this.board[i][j+1]="-1";
-						this.board[i][j+2]="-1";
-					}
-
-					// the first 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]==this.board[i][j-1] && this.board[i][j-1]==jewel_selected
-						&& jewel_selected!=this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
+					// check if 3 jewels are equal(horizontally)
+					else if(j <= (this.size-3) && jewel_selected==this.board[i][j+1].style.backgroundColor 
+						&& this.board[i][j+1].style.backgroundColor==this.board[i][j+2].style.backgroundColor){
 						num_jewels_destroyed+=3;
-						this.board[i][j-2]="-1";
-						this.board[i][j-1]="-1";
-						this.board[i][j]="-1";
-					}
-
-					// the middle 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]==jewel_selected
-						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]!=this.board[i][j+2]){
-						num_jewels_destroyed+=3;
-						this.board[i][j-1]="-1";
-						this.board[i][j]="-1";
-						this.board[i][j+1]="-1";
-					}
-
-					// the last 3 jewels are equal(horizontally)
-					else if(this.board[i][j-2]!=this.board[i][j-1] && this.board[i][j-1]!=jewel_selected
-						&& jewel_selected==this.board[i][j+1] && this.board[i][j+1]==this.board[i][j+2]){
-						num_jewels_destroyed+=3;
-						this.board[i][j]="-1";
-						this.board[i][j+1]="-1";
-						this.board[i][j+2]="-1";
-					}
-				}
-
-				//condition to check if it is the top or bottom end of the board
-				if( i > 1 && i < (this.size-2) && jewel_selected != "-1"){
-
-					// the 5 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
-						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
+						this.board[i][j].style.backgroundColor="";
+						this.board[i][j+1].style.backgroundColor="";
+						this.board[i][j+2].style.backgroundColor="";
+					}				
+					// check if 5 jewels are equal(vertically)
+					if(i <= (this.size-5) && jewel_selected==this.board[i+1][j].style.backgroundColor && this.board[i+1][j].style.backgroundColor==this.board[i+2][j].style.backgroundColor
+						&& this.board[i+2][j].style.backgroundColor==this.board[i+3][j].style.backgroundColor && this.board[i+3][j].style.backgroundColor==this.board[i+4][j].style.backgroundColor){
 						num_jewels_destroyed+=5;
-						this.board[i-2][j]="-1";
-						this.board[i-1][j]="-1";
-						this.board[i][j]="-1";
-						this.board[i+1][j]="-1";
-						this.board[i+2][j]="-1";
+						this.board[i][j].style.backgroundColor="";
+						this.board[i+1][j].style.backgroundColor="";
+						this.board[i+2][j].style.backgroundColor="";
+						this.board[i+3][j].style.backgroundColor="";
+						this.board[i+4][j].style.backgroundColor="";
 					}
-					// the first 4 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
-						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
+					// check if 4 jewels are equal(vertically)
+					else if(i <= (this.size-4) && jewel_selected==this.board[i+1][j].style.backgroundColor && this.board[i+1][j].style.backgroundColor==this.board[i+2][j].style.backgroundColor
+						&& this.board[i+2][j].style.backgroundColor==this.board[i+3][j].style.backgroundColor){
 						num_jewels_destroyed+=4;
-						this.board[i-2][j]="-1";
-						this.board[i-1][j]="-1";
-						this.board[i][j]="-1";
-						this.board[i+1][j]="-1";
+						this.board[i][j].style.backgroundColor="";
+						this.board[i+1][j].style.backgroundColor="";
+						this.board[i+2][j].style.backgroundColor="";
+						this.board[i+3][j].style.backgroundColor="";
 					}
-					// the last 4 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected
-						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
-						num_jewels_destroyed+=4;
-						this.board[i-1][j]="-1";
-						this.board[i][j]="-1";
-						this.board[i+1][j]="-1";
-						this.board[i+2][j]="-1";
-					}
-					// the first 3 jewels are equal(vertically)
-					if(this.board[i-2][j]==this.board[i-1][j] && this.board[i-1][j]==jewel_selected
-						&& jewel_selected!=this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
+					// check if 3 jewels are equal(vertically)
+					else if(i <= (this.size-3) && jewel_selected==this.board[i+1][j].style.backgroundColor 
+						&& this.board[i+1][j].style.backgroundColor==this.board[i+2][j].style.backgroundColor){
 						num_jewels_destroyed+=3;
-						this.board[i-2][j]="-1";
-						this.board[i-1][j]="-1";
-						this.board[i][j]="-1";
-					}
-					// the middle 3 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]==jewel_selected
-						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]!=this.board[i+2][j]){
-						num_jewels_destroyed+=3;
-						this.board[i-1][j]="-1";
-						this.board[i][j]="-1";
-						this.board[i+1][j]="-1";
-					}
-					// the last 3 jewels are equal(vertically)
-					if(this.board[i-2][j]!=this.board[i-1][j] && this.board[i-1][j]!=jewel_selected
-						&& jewel_selected==this.board[i+1][j] && this.board[i+1][j]==this.board[i+2][j]){
-						num_jewels_destroyed+=3;
-						this.board[i][j]="-1";
-						this.board[i+1][j]="-1";
-						this.board[i+2][j]="-1";
+						this.board[i][j].style.backgroundColor="";
+						this.board[i+1][j].style.backgroundColor="";
+						this.board[i+2][j].style.backgroundColor="";
 					}
 				}
 
 			}
 		}
+
 		//updating the score
 		this.score+=this.jewel_value*num_jewels_destroyed;
-
-		return num_jewels_destroyed;
+		return num_jewels_destroyed;		
 	}
 
 	//Create new pieces
-	create(){
+	createPieces(){
 		for(var i=0; i < this.size;i++){
-			for(var j=0;j < this.size;j++){
-				
+			for(var j=0;j < this.size;j++){				
 				//for each piece on top of a cleared piece move it down one position 
 				//or create a new one if it is on the first row
-				if(this.board[i][j] == "-1"){
+				if(this.board[i][j].style.backgroundColor == ""){
 					if(i > 0){
 						for(var k=i;k >= 0;k--){
 							if(k > 0){
-								this.board[k][j]=this.board[k-1][j];	
+								this.board[k][j].style.backgroundColor=this.board[k-1][j].style.backgroundColor;	
 							}
 							else{
-								this.board[k][j]=this.jewels[Math.floor(Math.random() * 5)];	
-							} 
-								
+								this.board[k][j].style.backgroundColor=this.jewels[Math.floor(Math.random() * 5)];	
+							} 								
 						}						
 					}
 					else{
-						this.board[i][j]=this.jewels[Math.floor(Math.random() * 5)];
+						this.board[i][j].style.backgroundColor=this.jewels[Math.floor(Math.random() * 5)];
 					}
 				}
 			}
 		}
 	}
 
-
-	// Updates visible board.
-	update() {
-		var boardString = "";
-
-		for (var i = 0; i < this.size; i++) {
-			boardString += i + " ";
-		}
-
-		boardString += "\n\n";
-
-		for (var i = 0; i < this.size; i++) {
-			for (var jewel of this.board[i]) {
-				boardString += jewel + " ";
-			}
-			boardString += "    " + i + "\n";
-		}
-
-		this.display.innerHTML = boardString;
-	}
 }
