@@ -1,6 +1,5 @@
 "use strict";
 
-
 var board;
 const size = 8;
 
@@ -13,6 +12,8 @@ var jewelIdBeingReplaced = null;
 var piece_destr = false;
 //timer of setInterval
 var timer = 1000;
+
+var block_drag = true;
 
 var div, hide
 
@@ -32,12 +33,16 @@ function start() {
 }
 
 function dragStart(event) {
-    colorBeingDragged = this.style.backgroundColor;
-    this.style.backgroundColor = "white";
-    jewelIdBeingDragged = parseInt(this.id);
-    div.style.backgroundColor = colorBeingDragged;
-    hide.style.visibility = "visible";
-    event.dataTransfer.setDragImage(hide, 5000, 5000);
+    if (block_drag) {
+        colorBeingDragged = this.style.backgroundColor;
+        this.style.backgroundColor = "white";
+        jewelIdBeingDragged = parseInt(this.id);
+        div.style.backgroundColor = colorBeingDragged;
+        hide.style.visibility = "visible";
+        event.dataTransfer.setDragImage(hide, 5000, 5000);
+    } else {
+        event.preventDefault();
+    }
 }
 
 function dragOver(e) {
@@ -54,8 +59,8 @@ function dragEnter(e) {
     e.preventDefault()
 }
 
-function dragLeave() {
-    this.style.backgroundColor = ''
+function dragLeave(e) {
+    e.preventDefault()
 }
 
 function dragDrop() {
@@ -99,8 +104,9 @@ function checkBoard() {
 
     var points = board.checkMove();
     //checking if move destroyed any pieces
-    if (points > 0) {// && piece_destr) {
+    if (points > 0) {
         piece_destr = false;
+        block_drag = false;
         setTimeout(function() {
             createPieces();
             updateScore();
@@ -109,6 +115,9 @@ function checkBoard() {
     else if (jewelIdBeingReplaced != null && jewelIdBeingDragged != null && piece_destr) {
         board.changeBackColor(jewelIdBeingReplaced, colorBeingReplaced)
         board.changeBackColor(jewelIdBeingDragged, colorBeingDragged)
+    }
+    if (points == 0) {
+        block_drag = true;
     }
 }
 
