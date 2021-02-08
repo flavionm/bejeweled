@@ -12,7 +12,7 @@ var jewelIdBeingReplaced = null;
 //flag to check if a valid moved destroyed any pieces
 var piece_destr = false;
 //timer of setInterval
-var timer = 2000;
+var timer = 1000;
 
 var div, hide
 
@@ -78,6 +78,7 @@ function dragEnd() {
     //checking for a valid move
     if (jewelIdBeingReplaced && validMove) {
         piece_destr = true;
+        checkBoard();
     } else if (jewelIdBeingReplaced && !validMove) {
         board.changeBackColor(jewelIdBeingReplaced, colorBeingReplaced)
         board.changeBackColor(jewelIdBeingDragged, colorBeingDragged)
@@ -98,8 +99,12 @@ function checkBoard() {
 
     var points = board.checkMove();
     //checking if move destroyed any pieces
-    if (points > 0 && piece_destr) {
+    if (points > 0) {// && piece_destr) {
         piece_destr = false;
+        setTimeout(function() {
+            createPieces();
+            updateScore();
+        }, timer);
     }
     else if (jewelIdBeingReplaced != null && jewelIdBeingDragged != null && piece_destr) {
         board.changeBackColor(jewelIdBeingReplaced, colorBeingReplaced)
@@ -113,10 +118,7 @@ function createPieces() {
 
 function updateScore() {
     document.getElementById("score").innerHTML = board.score;
+    setTimeout(function() {
+        checkBoard();
+    }, timer)
 }
-
-window.setInterval(function () {
-    checkBoard();
-    createPieces();
-    updateScore();
-}, timer);
