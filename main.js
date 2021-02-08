@@ -11,7 +11,7 @@ var jewelIdBeingReplaced = null;
 //flag to check if a valid moved destroyed any pieces
 var piece_destr = false;
 //timer of setInterval
-var timer = 1000;
+var timer = 600;
 
 var block_drag = true;
 
