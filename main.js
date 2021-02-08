@@ -21,7 +21,6 @@ var div, hide
 function start() {
     const grid = document.querySelector('.grid')
     board = new Board(size, grid);
-    document.getElementById("score").innerHTML = board.score;
     div = document.getElementById("drag");
     div.addEventListener("dragover", function(e) {
         e.preventDefault();
@@ -126,7 +125,7 @@ function createPieces() {
 }
 
 function updateScore() {
-    document.getElementById("score").innerHTML = board.score;
+    document.getElementById("score").innerHTML = ("000" + board.score).slice(-4);
     setTimeout(function() {
         checkBoard();
     }, timer)

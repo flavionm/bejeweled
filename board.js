@@ -7,7 +7,7 @@ class Board {
 		this.board = new Array(size);
 		this.jewels = ["red", "green", "blue", "yellow", "purple"];
 		this.score = 0;
-		this.jewel_value = 10;
+		this.jewel_value = 1;
 		this.display = display;
 		var id = 0;
 		for (var i = 0; i < this.size; i++) {

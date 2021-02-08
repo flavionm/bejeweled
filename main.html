@@ -12,13 +12,15 @@
 	<title>Bejeweled</title>
 </head>
 
-<body onload="start()">
+<body onload="start()" style="background-color: rgb(125, 223, 255); font-family: Arial, Helvetica, sans-serif;">
 	<h1>Bejeweled</h1>
-	<h3>score</h3>
-	<h1 id="score"></h1>
-	<div class="grid"></div>
+	<div class="flex">
+		<div class="grid"></div>
+		<h3>score: <span id="score">0000</span></h3>
+	</div>
+
 	<div class="help" id="drag"></div>
-	<div class="help" id="hide" style="background-color: white; top: 100%;"></div>
+	<div class="help" id="hide" style="background-color: rgb(125, 223, 255); top: 50%;"></div>
 </body>
 
 </html>
