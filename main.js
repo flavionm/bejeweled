@@ -13,6 +13,7 @@ var piece_destr = false;
 //timer of setInterval
 var timer = 600;
 
+//flag to block dragging while the pieces are falling
 var block_drag = true;
 
 var div, hide
@@ -27,10 +28,9 @@ function start() {
     });
     div.addEventListener("drop", dropThrough);
     hide = document.getElementById("hide")
-    //document.getElementById("row").setAttribute("max", size - 1);
-    //document.getElementById("column").setAttribute("max", size - 1);
 }
 
+//creates opaque block to drag
 function dragStart(event) {
     if (block_drag) {
         colorBeingDragged = this.style.backgroundColor;
@@ -44,6 +44,7 @@ function dragStart(event) {
     }
 }
 
+//moves opaque block along with the cursor
 function dragOver(e) {
     e.preventDefault();
     var x = e.pageX;
@@ -62,6 +63,7 @@ function dragLeave(e) {
     e.preventDefault()
 }
 
+//switch colors between the dragged block and the block being dropped into
 function dragDrop() {
     colorBeingReplaced = this.style.backgroundColor
     jewelIdBeingReplaced = parseInt(this.id)
@@ -70,7 +72,7 @@ function dragDrop() {
 }
 
 function dragEnd() {
-    // var div = document.getElementById("drag");
+    //resets opaque block
     div.style.top = 0;
     div.style.left = 0;
     div.style.visibility = "hidden";
@@ -89,6 +91,7 @@ function dragEnd() {
     } else board.changeBackColor(jewelIdBeingDragged, colorBeingDragged)
 }
 
+//makes sure the block drops on the grid
 function dropThrough(e) {
     var x = e.pageX;
     var y = e.pageY;
@@ -99,6 +102,7 @@ function dropThrough(e) {
     divBelow.dispatchEvent(new DragEvent('drop', {}));
 }
 
+//checks if there are any lines of the same color, and eliminates them after a delay
 function checkBoard() {
 
     var points = board.checkMove();
@@ -120,10 +124,12 @@ function checkBoard() {
     }
 }
 
+//creates the new pieces
 function createPieces() {
     board.createPieces();
 }
 
+//formats and updates the game score
 function updateScore() {
     document.getElementById("score").innerHTML = ("000" + board.score).slice(-4);
     setTimeout(function() {
