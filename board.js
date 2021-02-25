@@ -9,26 +9,38 @@ class Board {
 		this.score = 0;
 		this.jewel_value = 1;
 		this.display = display;
+		
+		//id of the jewel(from 0 to s(ize^2)-1)
 		var id = 0;
+		
 		for (var i = 0; i < this.size; i++) {
 			this.board[i] = Array(size);
 			for (var j = 0; j < this.size; j++) {
+				
+				//Creating the html element of a square
 				const jewel = document.createElement('div');
 				jewel.setAttribute('draggable', true);
 				jewel.setAttribute('id', id);
-				id++;
 				jewel.style.backgroundColor = this.jewels[Math.floor(Math.random() * this.jewels.length)];
+				
+				//Adding event listener for the actions of the player
 				jewel.addEventListener('dragstart', dragStart)
 				jewel.addEventListener('dragend', dragEnd);
 				jewel.addEventListener('dragover', dragOver);
 				jewel.addEventListener('dragenter', dragEnter);
 				jewel.addEventListener('drageleave', dragLeave);
 				jewel.addEventListener('drop', dragDrop);
+				
+				//Adding the html element of the square to the html div of the field(grid)
 				this.display.appendChild(jewel);
-				this.board[i][j] = jewel;
+				
+				this.board[i][j] = jewel;				
+				id++;
 			}
 		}
 
+		//Before the start of the game, the field is clear of any possible row/column combination
+		//The game stars with 0 points
 		while (this.checkMove() != 0) {
 			this.createPieces();
 		}
@@ -116,6 +128,7 @@ class Board {
 
 		//updating the score
 		this.score += this.jewel_value * num_jewels_destroyed;
+
 		return num_jewels_destroyed;
 	}
 
